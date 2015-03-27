@@ -9,6 +9,7 @@ Installation
 You have to install ruby and ruby rack on your system.
 
    sudo apt-get install ruby
+
    sudo apt-get install ruby-rack
 
 Usage
