@@ -117,7 +117,7 @@ eventLoopThread = Thread.new {
 server = TCPServer.new TCP_PORT
 loop do
   Thread.start(server.accept) do |client|
-    client.puts nodeCache.nodes.collect { |ip, conf| }.join('\n')
+    client.puts nodeCache.nodes.collect { |ip, conf| ip }.join('\n')
     client.close
   end
 end
