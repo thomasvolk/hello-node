@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 UDP_PORT=9998
-HTTP_PORT=9999
+TCP_PORT=9999
 BROADCAST_IP='255.255.255.255'
 LOOP_DELAY=10 # seconds sleep before sending the next boraodcast
 EXPIRE_TIME=60 # seconds after a node is expired 
@@ -24,7 +24,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 =end
 
 require 'socket'
-require 'rack'
 require 'thread'
 
 class Broadcast
@@ -115,18 +114,13 @@ eventLoopThread = Thread.new {
   end
 }
 
-app = Proc.new do |env|
-    html = "<!DOCTYPE html><html>"
-    html += "<ul>"
-    nodeCache.nodes.each { |ip, conf|
-        html += "<li><a href=\"http://#{ip}:#{HTTP_PORT}\">#{ip} - #{conf[:date]}</a></li>"
-    }
-    html += "</ul>"
-    html += "</html>"
-	['200', {'Content-Type' => 'text/html'}, [html]]
+server = TCPServer.new TCP_PORT
+loop do
+  Thread.start(server.accept) do |client|
+    client.puts nodeCache.nodes.collect { |ip, conf| }.join('\n')
+    client.close
+  end
 end
-
-Rack::Handler::WEBrick.run(app, { Port: HTTP_PORT })
 
 serverThread.join
 eventLoopThread.join

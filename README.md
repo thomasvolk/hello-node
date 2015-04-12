@@ -9,7 +9,6 @@ Installation
 You have to install ruby and ruby rack on your system.
 
     sudo apt-get install ruby
-    sudo apt-get install ruby-rack
 
 Usage
 -----
@@ -17,3 +16,7 @@ Usage
 You can execute the programm with:
 
     ./helloNode.rb
+
+To list all servers you can ask helloNode via telnet:
+
+    telnet localhost 9999
